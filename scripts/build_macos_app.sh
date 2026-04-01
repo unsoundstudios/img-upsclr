@@ -41,13 +41,9 @@ python3 -m venv "${VENV_DIR}"
 source "${VENV_DIR}/bin/activate"
 python3 -m pip install --upgrade pip
 python3 -m pip install -r "${ROOT_DIR}/requirements-desktop.txt"
-python3 "${ROOT_DIR}/scripts/generate_third_party_notices.py"
 python3 "${ROOT_DIR}/scripts/install_esrgan_backend.py" --target-dir "${ESRGAN_BUNDLE_DIR}"
 find "${ESRGAN_BUNDLE_DIR}" -name '._*' -type f -delete || true
 dot_clean "${ESRGAN_BUNDLE_DIR}" 2>/dev/null || true
-cp "${ROOT_DIR}/THIRD_PARTY_NOTICES.md" "${STAGE_DIR}/THIRD_PARTY_NOTICES.md"
-cp "${ROOT_DIR}/SECURITY.md" "${STAGE_DIR}/SECURITY.md"
-cp "${ROOT_DIR}/LICENSE" "${STAGE_DIR}/LICENSE"
 
 cd "${STAGE_DIR}"
 
@@ -58,9 +54,6 @@ pyinstaller \
   --name "${APP_SLUG}" \
   --icon "${ICON_ICNS}" \
   --add-data "realesrgan:realesrgan" \
-  --add-data "THIRD_PARTY_NOTICES.md:." \
-  --add-data "SECURITY.md:." \
-  --add-data "LICENSE:." \
   desktop_app.py
 
 rm -rf "${APP_PATH}"

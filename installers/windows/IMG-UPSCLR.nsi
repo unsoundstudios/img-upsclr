@@ -36,9 +36,6 @@ Section "Install"
   SetOutPath "$INSTDIR"
 
   File /r "${APP_SOURCE_DIR}\*"
-  File "THIRD_PARTY_NOTICES.md"
-  File "SECURITY.md"
-  File "LICENSE"
 
   WriteRegStr HKLM "Software\${APP_NAME}" "Install_Dir" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}" "DisplayName" "${APP_NAME}"
@@ -63,9 +60,6 @@ Section "Uninstall"
   Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"
   RMDir "$SMPROGRAMS\${APP_NAME}"
 
-  Delete "$INSTDIR\THIRD_PARTY_NOTICES.md"
-  Delete "$INSTDIR\SECURITY.md"
-  Delete "$INSTDIR\LICENSE"
   Delete "$INSTDIR\Uninstall.exe"
   RMDir /r "$INSTDIR"
 

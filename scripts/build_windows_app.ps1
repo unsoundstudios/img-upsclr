@@ -15,7 +15,6 @@ $esrganBundleDir = Join-Path (Resolve-Path ".").Path "build\esrgan_bundle"
 
 & $venvPython -m pip install --upgrade pip
 & $venvPython -m pip install -r requirements-desktop.txt
-& $venvPython scripts/generate_third_party_notices.py
 if (Test-Path $esrganBundleDir) { Remove-Item $esrganBundleDir -Recurse -Force }
 New-Item -ItemType Directory -Path $esrganBundleDir | Out-Null
 & $venvPython scripts/install_esrgan_backend.py --target-dir $esrganBundleDir
@@ -29,9 +28,6 @@ if (Test-Path "build\$AppName") { Remove-Item "build\$AppName" -Recurse -Force }
   --windowed `
   --name $AppName `
   --add-data "$esrganBundleDir;realesrgan" `
-  --add-data "THIRD_PARTY_NOTICES.md;." `
-  --add-data "SECURITY.md;." `
-  --add-data "LICENSE;." `
   desktop_app.py
 
 Write-Host "Built Windows app folder at dist\$AppName"

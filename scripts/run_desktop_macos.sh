@@ -14,7 +14,6 @@ else
 fi
 
 cd "${ROOT_DIR}"
-python3 scripts/generate_third_party_notices.py
 if ! python3 scripts/install_esrgan_backend.py; then
   echo "Warning: Real-ESRGAN backend is not ready. Upscaling jobs may fail until install succeeds."
 fi

@@ -29,7 +29,6 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QTableWidget,
     QTableWidgetItem,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -477,14 +476,10 @@ class MainWindow(QMainWindow):
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(output_root)))
 
     def _show_about_dialog(self) -> None:
-        notices = self._find_notice_file("THIRD_PARTY_NOTICES.md")
-        notices_text = self._read_text_file(notices, "")
-        deps_summary = self._parse_dependency_summary(notices_text)
-
         about = QDialog(self)
         about.setWindowTitle("About IMG-UPSCLR")
         about.setModal(True)
-        about.resize(700, 520)
+        about.resize(640, 360)
 
         layout = QVBoxLayout(about)
         layout.setContentsMargins(14, 14, 14, 14)
@@ -505,21 +500,10 @@ class MainWindow(QMainWindow):
             "Modes: Smart, Crisp, Photo, Classic (legacy mode values are still accepted)\n"
             "Engine: detail-safe upscale + optional Real-ESRGAN AI path for photo/render assets\n"
             "AI target: up to 16x when AI path is enabled\n"
-            "Formats: PNG, JPG, JPEG, WEBP, TIFF, BMP\n"
-            "Privacy: your files are processed locally in the desktop app."
+            "Formats: PNG, JPG, JPEG, WEBP, TIFF, BMP"
         )
         details.setWordWrap(True)
         layout.addWidget(details)
-
-        deps_title = QLabel("Included Third-Party Software")
-        deps_title.setStyleSheet("font-weight: 600; color: #cfe2ff;")
-        layout.addWidget(deps_title)
-
-        deps_view = QTextEdit()
-        deps_view.setReadOnly(True)
-        deps_view.setPlainText(deps_summary)
-        deps_view.setFixedHeight(220)
-        layout.addWidget(deps_view)
 
         close_btn = QPushButton("Close")
         close_btn.clicked.connect(about.accept)
@@ -529,56 +513,6 @@ class MainWindow(QMainWindow):
         layout.addLayout(close_row)
 
         about.exec()
-
-    @staticmethod
-    def _find_notice_file(filename: str) -> Path:
-        candidates: list[Path] = [Path.cwd() / filename]
-        if getattr(sys, "frozen", False):
-            exe_dir = Path(sys.executable).resolve().parent
-            candidates.extend(
-                [
-                    exe_dir / filename,
-                    exe_dir.parent / "Resources" / filename,
-                    exe_dir.parent / filename,
-                ]
-            )
-        else:
-            candidates.append(Path(__file__).resolve().parent / filename)
-
-        for item in candidates:
-            if item.exists():
-                return item
-        return candidates[0]
-
-    @staticmethod
-    def _read_text_file(path: Path, fallback: str) -> str:
-        try:
-            if path.exists():
-                return path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            pass
-        return fallback
-
-    @staticmethod
-    def _parse_dependency_summary(notices_text: str) -> str:
-        lines = notices_text.splitlines()
-        deps: list[str] = []
-        for line in lines:
-            if not line.startswith("|"):
-                continue
-            parts = [item.strip() for item in line.strip().strip("|").split("|")]
-            if len(parts) < 4:
-                continue
-            name, version, license_name, _homepage = parts[:4]
-            if name.lower() in {"package", "---"}:
-                continue
-            lowered = f"{version} {license_name}".lower()
-            if "not installed" in lowered or "unknown" in lowered:
-                continue
-            deps.append(f"- {name} {version} ({license_name})")
-        if not deps:
-            return "- Third-party metadata is unavailable in this build."
-        return "\n".join(deps)
 
     def _start_job(self) -> None:
         if self.thread and self.thread.isRunning():
