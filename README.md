@@ -157,10 +157,6 @@ This validates:
 
 ## Configuration
 
-Production template:
-
-- `.env.production.example`
-
 Key variables:
 
 - `MAX_UPLOAD_FILES`
