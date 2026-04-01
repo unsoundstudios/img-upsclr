@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Shared upscaler processing engine used by CLI, desktop app, and web API.
+Shared upscaler processing engine used by the desktop app and CLI.
 """
 
 from __future__ import annotations
