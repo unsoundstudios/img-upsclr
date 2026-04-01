@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+.venv-*/
+venv/
+
+# Local caches and temp data
+.cache/
+.web_jobs/
+
+# Build and release artifacts
+build/
+dist/
+release/
+installers/windows/output/
+*.spec
+
+# Large local asset/test folders
+samples/
+
+# macOS metadata
+.DS_Store
+._*
+
+# Editor/OS misc
+Thumbs.db

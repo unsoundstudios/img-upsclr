@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IMG-UPSCLR</title>
+  <style>
+    :root {
+      --bg: #060c15;
+      --bg-soft: #0b1422;
+      --card: #101b2e;
+      --line: #253754;
+      --line-strong: #365884;
+      --text: #e8f0ff;
+      --muted: #a9bad7;
+      --primary: #2f90ff;
+      --primary-strong: #1f7ff1;
+      --primary-soft: #142944;
+      --ok: #4ed39f;
+      --warn: #f2bc4a;
+      --bad: #ff7d8b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      background:
+        radial-gradient(circle at top right, #143459 0%, transparent 42%),
+        radial-gradient(circle at bottom left, #103a45 0%, transparent 40%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1120px;
+      margin: 24px auto;
+      padding: 0 20px 28px;
+    }
+    .hero {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: linear-gradient(180deg, rgba(20, 38, 64, 0.82), rgba(12, 24, 41, 0.86));
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 32px;
+      letter-spacing: 0.35px;
+      color: #f1f6ff;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+    }
+    .badges {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      border: 1px solid #335780;
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 12px;
+      color: #cde2ff;
+      background: rgba(19, 43, 71, 0.75);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .layout {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr 1.1fr;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26);
+    }
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: #e7f1ff;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    input[type="number"],
+    input[type="text"],
+    select,
+    input[type="file"] {
+      width: 100%;
+      border: 1px solid #2f4768;
+      border-radius: 10px;
+      padding: 10px 11px;
+      font-size: 14px;
+      color: var(--text);
+      background: #0c1525;
+      outline: none;
+      transition: border-color 120ms ease, box-shadow 120ms ease;
+    }
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    select:focus,
+    input[type="file"]:focus {
+      border-color: #4b76aa;
+      box-shadow: 0 0 0 3px rgba(43, 124, 220, 0.25);
+    }
+    .checks {
+      margin-top: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+    }
+    .checks label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button, .btn {
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #f5f9ff;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 100ms ease, transform 100ms ease;
+    }
+    button:hover, .btn:hover {
+      background: var(--primary-strong);
+      transform: translateY(-1px);
+    }
+    button:disabled {
+      cursor: default;
+      opacity: 0.6;
+    }
+    .btn-secondary {
+      background: var(--primary-soft);
+      color: #bdd9ff;
+      border: 1px solid #35567f;
+    }
+    .status-pill {
+      padding: 6px 9px;
+      border-radius: 999px;
+      border: 1px solid #345171;
+      background: #162b46;
+      color: #c0d8ff;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.45px;
+    }
+    .progress-wrap {
+      margin-top: 8px;
+      width: 100%;
+      border: 1px solid #274160;
+      background: #101d31;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 14px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3c97ff, #35d3a5);
+      transition: width 200ms ease;
+    }
+    .meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid #1f314d;
+      padding: 8px 6px;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+    }
+    .status-ok { color: var(--ok); }
+    .status-warn { color: var(--warn); }
+    .status-bad { color: var(--bad); }
+    .error {
+      margin-top: 10px;
+      color: var(--bad);
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .helper {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dropzone {
+      border: 1px dashed #476991;
+      border-radius: 12px;
+      padding: 12px;
+      background: #0c1829;
+    }
+    .file-list {
+      margin-top: 8px;
+      max-height: 120px;
+      overflow: auto;
+      border-radius: 10px;
+      border: 1px solid #2c4465;
+      background: #0a1321;
+      padding: 8px;
+      font-size: 12px;
+      color: #c4d8f5;
+      line-height: 1.5;
+    }
+    .metrics {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .metric {
+      border: 1px solid #2f4768;
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #0c1626;
+    }
+    .metric-label {
+      font-size: 11px;
+      color: #8fadce;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      font-weight: 700;
+    }
+    .metric-value {
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 2px;
+      color: #dbe8ff;
+    }
+    tr:hover td {
+      background: rgba(23, 44, 73, 0.42);
+    }
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+      .grid, .checks { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div>
+        <h1>IMG-UPSCLR</h1>
+        <p class="subtitle">Production upscaling for product images and creative assets with adaptive detail-safe + AI workflows.</p>
+      </div>
+      <div class="badges">
+        <span class="badge">Secure Uploads</span>
+        <span class="badge">Batch Ready</span>
+        <span class="badge">Max 12 Images</span>
+      </div>
+    </div>
+
+    <div class="layout">
+      <section class="card">
+        <h2>Upload & Settings</h2>
+        <form id="job-form">
+          <div class="field dropzone">
+            <label for="files">Images</label>
+            <input id="files" name="files" type="file" multiple accept=".png,.jpg,.jpeg,.webp,.tif,.tiff,.bmp" required />
+            <div id="upload-policy" class="helper">Up to 12 images per job.</div>
+            <div id="selected-files" class="file-list">No files selected.</div>
+          </div>
+
+          <div class="grid" style="margin-top: 12px;">
+            <div class="field">
+              <label for="mode">Mode</label>
+              <select id="mode" name="mode">
+                <option value="smart">Smart (Recommended)</option>
+                <option value="crisp">Crisp Assets (Logos/UI/Text)</option>
+                <option value="photo">Photo & Renders (AI)</option>
+                <option value="classic">Classic Script (Original)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="scale">Scale</label>
+              <input id="scale" name="scale" type="number" min="1" max="30" step="0.1" value="10" />
+            </div>
+            <div class="field">
+              <label for="max-output-megapixels">Max Output MP</label>
+              <input id="max-output-megapixels" name="max_output_megapixels" type="number" min="1" max="3000" step="1" value="600" />
+            </div>
+            <div class="field">
+              <label for="suffix">Suffix</label>
+              <input id="suffix" name="suffix" type="text" value="_UPSCALED" />
+            </div>
+          </div>
+
+          <div class="checks">
+            <label><input id="force-large" type="checkbox" /> Allow extra-large outputs</label>
+            <label><input id="include-already-upscaled" type="checkbox" /> Include already-upscaled filenames</label>
+            <label><input id="overwrite" type="checkbox" /> Overwrite existing outputs</label>
+            <label><input id="dry-run" type="checkbox" /> Dry-run only</label>
+            <label><input id="artwork-ai" type="checkbox" checked /> Enable AI enhancement for photo/render assets (Real-ESRGAN up to 16x)</label>
+          </div>
+          <div id="mode-help" class="helper"></div>
+
+          <div class="actions">
+            <button id="submit-btn" type="submit">Start Job</button>
+            <span id="submit-meta" class="meta"></span>
+          </div>
+          <div id="error-box" class="error"></div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Job Status</h2>
+        <div class="actions">
+          <span id="status-pill" class="status-pill">Idle</span>
+          <a id="download-link" class="btn btn-secondary" style="display:none" download>Download ZIP</a>
+        </div>
+        <div class="progress-wrap">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <div id="job-meta" class="meta">No job running.</div>
+        <div class="metrics">
+          <div class="metric">
+            <div class="metric-label">Processed</div>
+            <div id="metric-processed" class="metric-value">0</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Failed</div>
+            <div id="metric-failed" class="metric-value">0</div>
+          </div>
+          <div class="metric">
+            <div class="metric-label">Uploaded</div>
+            <div id="metric-uploaded" class="metric-value">0</div>
+          </div>
+        </div>
+        <table id="results-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Status</th>
+              <th>Profile</th>
+              <th>Output</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("job-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const submitMeta = document.getElementById("submit-meta");
+    const errorBox = document.getElementById("error-box");
+    const statusPill = document.getElementById("status-pill");
+    const progressBar = document.getElementById("progress-bar");
+    const jobMeta = document.getElementById("job-meta");
+    const resultsBody = document.querySelector("#results-table tbody");
+    const downloadLink = document.getElementById("download-link");
+    const filesInput = document.getElementById("files");
+    const uploadPolicy = document.getElementById("upload-policy");
+    const selectedFilesBox = document.getElementById("selected-files");
+    const modeSelect = document.getElementById("mode");
+    const modeHelp = document.getElementById("mode-help");
+    const metricProcessed = document.getElementById("metric-processed");
+    const metricFailed = document.getElementById("metric-failed");
+    const metricUploaded = document.getElementById("metric-uploaded");
+
+    let pollTimer = null;
+    let currentJobId = null;
+    let maxUploadFiles = 12;
+    let maxFileSizeMb = 25;
+    const modeDescriptions = {
+      smart: "Smart automatically protects crisp assets (logos/UI/text) and applies AI to photo-like assets.",
+      crisp: "Crisp keeps deterministic detail-safe upscaling for labels, UI captures, logos, and typography.",
+      photo: "Photo prioritizes AI upscaling for product photos, renders, and gradient-heavy creative content.",
+      classic: "Classic preserves the original script behavior for non-AI output consistency."
+    };
+
+    function setStatus(status) {
+      statusPill.textContent = status;
+      statusPill.classList.remove("status-ok", "status-warn", "status-bad");
+      if (status === "completed") statusPill.classList.add("status-ok");
+      if (status === "running" || status === "queued") statusPill.classList.add("status-warn");
+      if (status === "failed") statusPill.classList.add("status-bad");
+    }
+
+    function setProgress(value) {
+      progressBar.style.width = `${Math.max(0, Math.min(100, value))}%`;
+    }
+
+    function resetResults() {
+      resultsBody.innerHTML = "";
+    }
+
+    function renderResults(results) {
+      resultsBody.innerHTML = "";
+      for (const item of results) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${escapeHtml(shortName(item.source || ""))}</td>
+          <td>${escapeHtml(item.status || "")}</td>
+          <td>${escapeHtml(kindLabel(item.kind || ""))}</td>
+          <td>${escapeHtml(shortName(item.output || ""))}</td>
+          <td>${escapeHtml(item.reason || "")}</td>
+        `;
+        resultsBody.appendChild(tr);
+      }
+    }
+
+    function shortName(pathValue) {
+      if (!pathValue) return "";
+      return pathValue.split("/").pop();
+    }
+
+    function kindLabel(kind) {
+      const labels = {
+        detail: "crisp-detail",
+        creative: "ai-photo",
+        ui: "ui-legacy",
+        artwork: "artwork-legacy"
+      };
+      return labels[kind] || kind;
+    }
+
+    function updateModeHelp() {
+      const mode = modeSelect.value || "smart";
+      const aiOn = document.getElementById("artwork-ai").checked;
+      const aiText = aiOn
+        ? " AI path is enabled: photo/render assets can upscale up to 16x."
+        : " AI path is disabled: all images use non-AI upscaling.";
+      modeHelp.textContent = (modeDescriptions[mode] || modeDescriptions.smart) + aiText;
+    }
+
+    function updateModeOptions(modes) {
+      if (!Array.isArray(modes) || modes.length === 0) return;
+      const active = modeSelect.value || "smart";
+      modeSelect.innerHTML = "";
+      for (const entry of modes) {
+        if (!entry || !entry.value || !entry.label) continue;
+        const opt = document.createElement("option");
+        opt.value = entry.value;
+        opt.textContent = entry.label;
+        modeSelect.appendChild(opt);
+      }
+      if ([...modeSelect.options].some((opt) => opt.value === active)) {
+        modeSelect.value = active;
+      }
+      updateModeHelp();
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function pollJob(jobId) {
+      try {
+        const response = await fetch(`/jobs/${jobId}`);
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Failed to load job status");
+        }
+
+        setStatus(data.status || "unknown");
+        setProgress(data.progress || 0);
+        renderResults(data.results || []);
+
+        jobMeta.textContent =
+          `Processed ${data.processed || 0} / ${data.total || 0}. ` +
+          `Failed: ${data.failed || 0}. Saved uploads: ${data.saved_files || 0}.`;
+        metricProcessed.textContent = String(data.processed || 0);
+        metricFailed.textContent = String(data.failed || 0);
+        metricUploaded.textContent = String(data.saved_files || 0);
+
+        if (data.status === "completed" && data.download_url) {
+          downloadLink.style.display = "inline-block";
+          downloadLink.href = data.download_url;
+          submitBtn.disabled = false;
+          submitMeta.textContent = "Job completed.";
+          stopPolling();
+        } else if (data.status === "failed") {
+          submitBtn.disabled = false;
+          submitMeta.textContent = "Job failed.";
+          errorBox.textContent = data.error || "Unknown error";
+          stopPolling();
+        }
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitMeta.textContent = "Unable to update job.";
+        errorBox.textContent = String(err);
+        stopPolling();
+      }
+    }
+
+    function stopPolling() {
+      if (pollTimer) {
+        clearInterval(pollTimer);
+        pollTimer = null;
+      }
+    }
+
+    function renderSelectedFiles(files) {
+      if (!files || files.length === 0) {
+        selectedFilesBox.textContent = "No files selected.";
+        return;
+      }
+      const names = Array.from(files).map((f) => f.name).slice(0, maxUploadFiles);
+      selectedFilesBox.innerHTML = names.map((n) => `• ${escapeHtml(n)}`).join("<br>");
+      if (files.length > maxUploadFiles) {
+        selectedFilesBox.innerHTML += `<br>• ...and ${files.length - maxUploadFiles} more`;
+      }
+    }
+
+    function updatePolicyText() {
+      uploadPolicy.textContent =
+        `Upload 1 to ${maxUploadFiles} images per job. Max ${maxFileSizeMb} MB per image.`;
+    }
+
+    async function fetchLimits() {
+      try {
+        const response = await fetch("/limits");
+        if (!response.ok) return;
+        const data = await response.json();
+        if (Number.isFinite(data.max_upload_files)) maxUploadFiles = data.max_upload_files;
+        if (Number.isFinite(data.max_file_size_mb)) maxFileSizeMb = data.max_file_size_mb;
+        updateModeOptions(data.modes);
+      } catch (_) {
+        // Keep fallback defaults.
+      }
+      updatePolicyText();
+      updateModeHelp();
+    }
+
+    filesInput.addEventListener("change", () => {
+      const count = filesInput.files ? filesInput.files.length : 0;
+      renderSelectedFiles(filesInput.files);
+      if (count > maxUploadFiles) {
+        errorBox.textContent = `Please select at most ${maxUploadFiles} images.`;
+      } else {
+        errorBox.textContent = "";
+      }
+    });
+    modeSelect.addEventListener("change", updateModeHelp);
+    document.getElementById("artwork-ai").addEventListener("change", updateModeHelp);
+
+    fetchLimits();
+    renderSelectedFiles(filesInput.files);
+    updateModeHelp();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      errorBox.textContent = "";
+      resetResults();
+      setProgress(0);
+      setStatus("queued");
+      jobMeta.textContent = "Submitting job…";
+      metricProcessed.textContent = "0";
+      metricFailed.textContent = "0";
+      metricUploaded.textContent = filesInput.files ? String(filesInput.files.length) : "0";
+      downloadLink.style.display = "none";
+
+      const files = filesInput.files;
+      if (!files || files.length === 0) {
+        errorBox.textContent = "Please select at least one image.";
+        return;
+      }
+      if (files.length > maxUploadFiles) {
+        errorBox.textContent = `Maximum ${maxUploadFiles} images per job.`;
+        return;
+      }
+
+      const fd = new FormData();
+      for (const file of files) fd.append("files", file);
+      fd.append("mode", document.getElementById("mode").value);
+      fd.append("scale", document.getElementById("scale").value);
+      fd.append("max_output_megapixels", document.getElementById("max-output-megapixels").value);
+      fd.append("suffix", document.getElementById("suffix").value || "_UPSCALED");
+      fd.append("force_large", document.getElementById("force-large").checked ? "true" : "false");
+      fd.append(
+        "include_already_upscaled",
+        document.getElementById("include-already-upscaled").checked ? "true" : "false"
+      );
+      fd.append("overwrite", document.getElementById("overwrite").checked ? "true" : "false");
+      fd.append("dry_run", document.getElementById("dry-run").checked ? "true" : "false");
+      fd.append("artwork_ai", document.getElementById("artwork-ai").checked ? "true" : "false");
+
+      submitBtn.disabled = true;
+      submitMeta.textContent = "Uploading and starting job…";
+
+      try {
+        const response = await fetch("/jobs", { method: "POST", body: fd });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Failed to create job");
+        }
+
+        currentJobId = data.job_id;
+        submitMeta.textContent = `Job ${currentJobId} started.`;
+        setStatus("running");
+        stopPolling();
+        pollTimer = setInterval(() => pollJob(currentJobId), 900);
+        await pollJob(currentJobId);
+      } catch (err) {
+        submitBtn.disabled = false;
+        setStatus("failed");
+        submitMeta.textContent = "";
+        errorBox.textContent = String(err);
+      }
+    });
+  </script>
+</body>
+</html>

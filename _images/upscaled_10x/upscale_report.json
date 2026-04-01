@@ -1,0 +1,249 @@
+{
+  "input": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images",
+  "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x",
+  "scale": 10.0,
+  "mode": "auto",
+  "suffix": "_UPSCALED",
+  "results": [
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/BitFlanger_UI.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/BitFlanger_UI_UPSCALED.png",
+      "kind": "ui",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1120,
+        732
+      ],
+      "output_size": [
+        11200,
+        7320
+      ],
+      "estimated_output_megapixels": 81.98
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/Injector_UI-2.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/Injector_UI-2_UPSCALED.png",
+      "kind": "ui",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1038,
+        616
+      ],
+      "output_size": [
+        10380,
+        6160
+      ],
+      "estimated_output_megapixels": 63.94
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/MoltenQ_UI.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/MoltenQ_UI_UPSCALED.png",
+      "kind": "ui",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        948,
+        618
+      ],
+      "output_size": [
+        9480,
+        6180
+      ],
+      "estimated_output_megapixels": 58.59
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/PERCUSSION TOOLBOX VOL. 1 PROMO.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/PERCUSSION TOOLBOX VOL. 1 PROMO_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1024,
+        1024
+      ],
+      "output_size": [
+        10240,
+        10240
+      ],
+      "estimated_output_megapixels": 104.86
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/PERCUSSION TOOLBOX VOL. 1.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/PERCUSSION TOOLBOX VOL. 1_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1024,
+        1024
+      ],
+      "output_size": [
+        10240,
+        10240
+      ],
+      "estimated_output_megapixels": 104.86
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/PERCUSSION TOOLBOX VOL. 2.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/PERCUSSION TOOLBOX VOL. 2_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1024,
+        1024
+      ],
+      "output_size": [
+        10240,
+        10240
+      ],
+      "estimated_output_megapixels": 104.86
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/UNSOUND STUDIOS BLACK HOLE KONTAKT LIBRARY COVER.jpg",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/UNSOUND STUDIOS BLACK HOLE KONTAKT LIBRARY COVER_UPSCALED.jpg",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1093,
+        1093
+      ],
+      "output_size": [
+        10930,
+        10930
+      ],
+      "estimated_output_megapixels": 119.46
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/hats1.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/hats1_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1040,
+        1040
+      ],
+      "output_size": [
+        10400,
+        10400
+      ],
+      "estimated_output_megapixels": 108.16
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/hats2.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/hats2_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1040,
+        1040
+      ],
+      "output_size": [
+        10400,
+        10400
+      ],
+      "estimated_output_megapixels": 108.16
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/kicks1.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/kicks1_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1040,
+        1040
+      ],
+      "output_size": [
+        10400,
+        10400
+      ],
+      "estimated_output_megapixels": 108.16
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/kicks2.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/kicks2_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1040,
+        1040
+      ],
+      "output_size": [
+        10400,
+        10400
+      ],
+      "estimated_output_megapixels": 108.16
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/ritualistic808s2.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/ritualistic808s2_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1024,
+        1024
+      ],
+      "output_size": [
+        10240,
+        10240
+      ],
+      "estimated_output_megapixels": 104.86
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/ritualistic808sfullcover.jpg",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/ritualistic808sfullcover_UPSCALED.jpg",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1024,
+        1024
+      ],
+      "output_size": [
+        10240,
+        10240
+      ],
+      "estimated_output_megapixels": 104.86
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/snares1.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/snares1_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1040,
+        1040
+      ],
+      "output_size": [
+        10400,
+        10400
+      ],
+      "estimated_output_megapixels": 108.16
+    },
+    {
+      "source": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/snares2.png",
+      "output": "/Volumes/MTA XHD/_UnsoundStudios-Advertisements/free_products/_images/upscaled_10x/snares2_UPSCALED.png",
+      "kind": "artwork",
+      "status": "planned",
+      "reason": null,
+      "input_size": [
+        1040,
+        1040
+      ],
+      "output_size": [
+        10400,
+        10400
+      ],
+      "estimated_output_megapixels": 108.16
+    }
+  ]
+}
