@@ -8,6 +8,11 @@ __pycache__/
 .venv-*/
 venv/
 
+# Environment files
+.env
+.env.*
+!.env.production.example
+
 # Local caches and temp data
 .cache/
 .web_jobs/
