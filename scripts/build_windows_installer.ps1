@@ -1,7 +1,7 @@
 Param(
   [string]$NsisCompiler = "C:\Program Files (x86)\NSIS\makensis.exe",
   [string]$AppName = "IMG-UPSCLR",
-  [string]$AppVersion = "1.0.0"
+  [string]$AppVersion = "0.0.1"
 )
 
 $ErrorActionPreference = "Stop"

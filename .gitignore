@@ -14,7 +14,6 @@ venv/
 
 # Local caches and temp data
 .cache/
-.web_jobs/
 
 # Build and release artifacts
 build/
@@ -25,6 +24,9 @@ installers/windows/output/
 
 # Large local asset/test folders
 samples/
+assets/blender/
+*.blend
+*.blend1
 
 # macOS metadata
 .DS_Store

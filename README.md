@@ -2,6 +2,8 @@
 
 IMG-UPSCLR is a desktop image upscaler for macOS and Windows.
 
+Current public release: `0.0.1`
+
 ## Overview
 
 IMG-UPSCLR supports:
@@ -73,7 +75,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build_windows_installer.ps1
 Optional version override:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\build_windows_installer.ps1 -AppVersion 1.0.0
+powershell -ExecutionPolicy Bypass -File .\scripts\build_windows_installer.ps1 -AppVersion 0.0.1
 ```
 
 Installer output:

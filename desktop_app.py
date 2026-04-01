@@ -67,7 +67,7 @@ class UpscaleWorker(QObject):
 class MainWindow(QMainWindow):
     ORG = "UnsoundStudios"
     APP = "IMG_UPSCLR"
-    VERSION = "1.0.0"
+    VERSION = "0.0.1"
     MAX_IMAGES = 12
     MODE_OPTIONS = [
         ("Smart (Recommended)", "smart"),
