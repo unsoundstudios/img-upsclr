@@ -12,6 +12,11 @@ if (!(Test-Path $VenvDir)) {
 
 $venvPython = Join-Path $VenvDir "Scripts\python.exe"
 $esrganBundleDir = Join-Path (Resolve-Path ".").Path "build\esrgan_bundle"
+$iconPath = Join-Path (Resolve-Path ".").Path "assets\img-upsclr_logo.ico"
+
+if (!(Test-Path $iconPath)) {
+  throw "Missing Windows app icon: $iconPath"
+}
 
 & $venvPython -m pip install --upgrade pip
 & $venvPython -m pip install -r requirements-desktop.txt
@@ -27,6 +32,9 @@ if (Test-Path "build\$AppName") { Remove-Item "build\$AppName" -Recurse -Force }
   --noconfirm `
   --windowed `
   --name $AppName `
+  --icon $iconPath `
+  --add-data "assets\img-upsclr_logo.ico;assets" `
+  --add-data "assets\img-upsclr_logo.png;assets" `
   --add-data "$esrganBundleDir;realesrgan" `
   desktop_app.py
 

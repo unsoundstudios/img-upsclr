@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import QObject, QSettings, QThread, Signal, QUrl
-from PySide6.QtGui import QDesktopServices
+from PySide6.QtGui import QDesktopServices, QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -86,11 +86,23 @@ class MainWindow(QMainWindow):
         self.selected_files: list[Path] = []
 
         self.setWindowTitle("IMG-UPSCLR")
+        self._apply_window_icon()
         self.resize(1360, 900)
         self.setMinimumSize(1200, 760)
         self._build_ui()
         self._apply_style()
         self._load_settings()
+
+    def _resource_path(self, relative_path: str) -> Path:
+        base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+        return base / relative_path
+
+    def _apply_window_icon(self) -> None:
+        for relative_path in ("assets/img-upsclr_logo.ico", "assets/img-upsclr_logo.png"):
+            icon_path = self._resource_path(relative_path)
+            if icon_path.exists():
+                self.setWindowIcon(QIcon(str(icon_path)))
+                return
 
     def _build_ui(self) -> None:
         root = QWidget(self)

@@ -13,6 +13,7 @@
 !define APP_SOURCE_DIR "..\..\dist\IMG-UPSCLR"
 !define APP_INSTALL_DIR "$PROGRAMFILES64\${APP_NAME}"
 !define APP_OUTPUT_DIR "output"
+!define APP_ICON "..\..\assets\img-upsclr_logo.ico"
 
 Unicode True
 SetCompressor /SOLID lzma
@@ -20,6 +21,8 @@ RequestExecutionLevel admin
 
 Name "${APP_NAME}"
 OutFile "${APP_OUTPUT_DIR}\${APP_NAME}-Setup-${APP_VERSION}.exe"
+Icon "${APP_ICON}"
+UninstallIcon "${APP_ICON}"
 InstallDir "${APP_INSTALL_DIR}"
 InstallDirRegKey HKLM "Software\${APP_NAME}" "Install_Dir"
 
@@ -49,8 +52,8 @@ Section "Install"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   CreateDirectory "$SMPROGRAMS\${APP_NAME}"
-  CreateShortcut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
-  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+  CreateShortcut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0
+  CreateShortcut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}" "" "$INSTDIR\${APP_EXE}" 0
 SectionEnd
 
 Section "Uninstall"
