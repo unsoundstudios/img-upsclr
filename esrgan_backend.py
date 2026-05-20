@@ -231,6 +231,27 @@ def planned_native_passes(scale: float, native_scale: int, max_native_passes: in
     return passes
 
 
+def summarize_realesrgan_output(stdout: str, stderr: str) -> str:
+    combined = "\n".join(item for item in (stderr.strip(), stdout.strip()) if item)
+    if not combined:
+        return "unknown error"
+
+    useful_lines: list[str] = []
+    for line in combined.splitlines():
+        text = line.strip()
+        if not text:
+            continue
+        if re.fullmatch(r"\d+(?:\.\d+)?%", text):
+            continue
+        if "queue" in text or "subgroup=" in text or "bugsbn1=" in text:
+            continue
+        useful_lines.append(text)
+
+    if not useful_lines:
+        return "Real-ESRGAN stopped before producing the output image."
+    return "\n".join(useful_lines[-8:])
+
+
 def run_realesrgan_chain(
     source_rgb: Image.Image,
     target_size: tuple[int, int],
@@ -278,7 +299,7 @@ def run_realesrgan_chain(
                 check=False,
             )
             if process.returncode != 0:
-                detail = process.stderr.strip() or process.stdout.strip() or "unknown error"
+                detail = summarize_realesrgan_output(process.stdout, process.stderr)
                 lowered = detail.lower()
                 if "invalid gpu device" in lowered or "vk_error_incompatible_driver" in lowered:
                     detail = (

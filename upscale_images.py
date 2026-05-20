@@ -51,8 +51,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--max-images",
         type=int,
-        default=12,
-        help="Maximum images per run. Defaults to 12. Use 0 to disable this limit.",
+        default=100,
+        help="Maximum images per run. Defaults to 100. Use 0 to disable this limit.",
     )
     parser.add_argument(
         "--max-output-megapixels",

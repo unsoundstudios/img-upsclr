@@ -232,9 +232,6 @@ def classify_image(path: Path, img: Image.Image, forced_mode: str) -> str:
 
 
 def effective_scale_for_kind(kind: str, config: UpscaleConfig) -> float:
-    mode = normalize_mode(config.mode)
-    if mode in {"smart", "photo"} and kind == "creative" and config.artwork_ai_enabled:
-        return max(config.scale, config.artwork_ai_target_scale)
     return config.scale
 
 

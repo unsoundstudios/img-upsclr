@@ -37,6 +37,33 @@ from PySide6.QtWidgets import (
 from upscaler_core import JobResult, UpscaleConfig, normalize_mode, run_batch
 
 
+APP_USER_MODEL_ID = "UnsoundStudios.IMG_UPSCLR"
+
+
+def resource_path(relative_path: str) -> Path:
+    base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+    return base / relative_path
+
+
+def app_icon() -> QIcon:
+    for relative_path in ("assets/img-upsclr_logo.ico", "assets/img-upsclr_logo.png"):
+        icon_path = resource_path(relative_path)
+        if icon_path.exists():
+            return QIcon(str(icon_path))
+    return QIcon()
+
+
+def set_windows_app_id() -> None:
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(APP_USER_MODEL_ID)
+    except Exception:
+        pass
+
+
 class UpscaleWorker(QObject):
     progress_changed = Signal(int)
     row_ready = Signal(object)
@@ -69,7 +96,7 @@ class MainWindow(QMainWindow):
     ORG = "UnsoundStudios"
     APP = "IMG_UPSCLR"
     VERSION = "0.0.1"
-    MAX_IMAGES = 12
+    MAX_IMAGES = 100
     MODE_OPTIONS = [
         ("Smart (Recommended)", "smart"),
         ("Clean Photo (Non-AI)", "clean"),
@@ -93,16 +120,10 @@ class MainWindow(QMainWindow):
         self._apply_style()
         self._load_settings()
 
-    def _resource_path(self, relative_path: str) -> Path:
-        base = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
-        return base / relative_path
-
     def _apply_window_icon(self) -> None:
-        for relative_path in ("assets/img-upsclr_logo.ico", "assets/img-upsclr_logo.png"):
-            icon_path = self._resource_path(relative_path)
-            if icon_path.exists():
-                self.setWindowIcon(QIcon(str(icon_path)))
-                return
+        icon = app_icon()
+        if not icon.isNull():
+            self.setWindowIcon(icon)
 
     def _build_ui(self) -> None:
         root = QWidget(self)
@@ -432,7 +453,7 @@ class MainWindow(QMainWindow):
             overwrite=self.overwrite_cb.isChecked(),
             dry_run=self.dry_run_cb.isChecked(),
             artwork_ai_enabled=self.artwork_ai_cb.isChecked(),
-            artwork_ai_target_scale=16.0,
+            artwork_ai_target_scale=self.scale_spin.value(),
             auto_install_backend=True,
             esrgan_model_artwork="realesrgan-x4plus",
             artwork_ai_max_native_passes=1,
@@ -691,9 +712,13 @@ class MainWindow(QMainWindow):
 
 
 def main() -> int:
+    set_windows_app_id()
     app = QApplication(sys.argv)
     app.setApplicationName("IMG-UPSCLR")
     app.setOrganizationName(MainWindow.ORG)
+    icon = app_icon()
+    if not icon.isNull():
+        app.setWindowIcon(icon)
     window = MainWindow()
     window.showMaximized()
     return app.exec()
