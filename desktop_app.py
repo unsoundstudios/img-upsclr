@@ -29,6 +29,7 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QTableWidget,
     QTableWidgetItem,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -71,6 +72,7 @@ class MainWindow(QMainWindow):
     MAX_IMAGES = 12
     MODE_OPTIONS = [
         ("Smart (Recommended)", "smart"),
+        ("Clean Photo (Non-AI)", "clean"),
         ("Crisp Assets (Logos/UI/Text)", "crisp"),
         ("Photo & Renders (AI)", "photo"),
         ("Classic Script (Original)", "classic"),
@@ -137,9 +139,9 @@ class MainWindow(QMainWindow):
 
         self.input_edit = QLineEdit(str(Path.cwd()))
         self.output_edit = QLineEdit(str((Path.cwd() / "upscaled_10x").resolve()))
-        input_btn = QPushButton("Browse Folder…")
-        files_btn = QPushButton("Select Images…")
-        output_btn = QPushButton("Browse…")
+        input_btn = QPushButton("Browse Folder...")
+        files_btn = QPushButton("Select Images...")
+        output_btn = QPushButton("Browse...")
         input_btn.setMinimumWidth(120)
         files_btn.setMinimumWidth(120)
         output_btn.setMinimumWidth(105)
@@ -191,7 +193,7 @@ class MainWindow(QMainWindow):
         self.overwrite_cb = QCheckBox("Overwrite existing outputs")
         self.dry_run_cb = QCheckBox("Dry-run (plan only)")
         self.artwork_ai_cb = QCheckBox(
-            "Enable AI enhancement for photo/render assets (Real-ESRGAN up to 16x)"
+            "Enable conservative AI for photo/render assets (1 Real-ESRGAN pass + clean resize)"
         )
         self.artwork_ai_cb.setChecked(True)
         self.artwork_ai_cb.toggled.connect(self._update_mode_hint)
@@ -267,7 +269,7 @@ class MainWindow(QMainWindow):
 
         self.log_output = QTextEdit()
         self.log_output.setReadOnly(True)
-        self.log_output.setPlaceholderText("Run logs will appear here…")
+        self.log_output.setPlaceholderText("Run logs will appear here...")
         self.log_output.setFixedHeight(130)
         results_layout.addWidget(self.log_output)
         right_layout.addWidget(results_box, 1)
@@ -380,8 +382,8 @@ class MainWindow(QMainWindow):
         if not filenames:
             return
         if len(filenames) > self.MAX_IMAGES:
-            QMessageBox.warning(
-                self,
+            self._show_message(
+                QMessageBox.Icon.Warning,
                 "Too Many Images",
                 f"Please select at most {self.MAX_IMAGES} images.",
             )
@@ -421,6 +423,7 @@ class MainWindow(QMainWindow):
             artwork_ai_target_scale=16.0,
             auto_install_backend=True,
             esrgan_model_artwork="realesrgan-x4plus",
+            artwork_ai_max_native_passes=1,
         )
 
     def _mode_value(self) -> str:
@@ -434,14 +437,15 @@ class MainWindow(QMainWindow):
         ai_on = self.artwork_ai_cb.isChecked()
 
         mode_text = {
-            "smart": "Smart automatically protects crisp assets (logos/UI/text) and uses AI for photo-like assets.",
+            "smart": "Smart protects crisp assets and uses conservative AI only for photo-like assets.",
+            "clean": "Clean Photo uses deterministic non-AI resizing with photo-safe sharpening.",
             "crisp": "Crisp keeps detail-safe upscaling for product graphics, screenshots, labels, and typography.",
-            "photo": "Photo applies AI-first upscaling for natural photos, renders, and gradient-heavy assets.",
+            "photo": "Photo applies conservative AI upscaling for natural photos, renders, and gradient-heavy assets.",
             "classic": "Classic preserves the original script behavior for deterministic non-AI resizing.",
         }.get(mode, "Smart adaptive mode is active.")
 
         ai_text = (
-            "AI path is enabled: photo/render assets can upscale up to 16x."
+            "AI path is enabled: photo/render assets use one AI pass, then clean resizing."
             if ai_on
             else "AI path is disabled: all images stay on the original non-AI upscale flow."
         )
@@ -451,6 +455,7 @@ class MainWindow(QMainWindow):
     def _kind_label(kind: str | None) -> str:
         mapping = {
             "detail": "crisp-detail",
+            "clean_photo": "clean-photo",
             "creative": "ai-photo",
             "ui": "ui-legacy",
             "artwork": "artwork-legacy",
@@ -458,6 +463,46 @@ class MainWindow(QMainWindow):
         if not kind:
             return ""
         return mapping.get(kind, kind)
+
+    def _dialog_stylesheet(self) -> str:
+        return """
+            QMessageBox, QDialog {
+                background: #0b1424;
+                color: #e9f1ff;
+                font-family: "Avenir Next", "Segoe UI", sans-serif;
+                font-size: 13px;
+            }
+            QMessageBox QLabel, QDialog QLabel {
+                color: #e9f1ff;
+                background: transparent;
+                min-width: 360px;
+            }
+            QMessageBox QPushButton, QDialog QPushButton {
+                border: 0;
+                border-radius: 8px;
+                padding: 7px 14px;
+                background: #2f90ff;
+                color: #f7fbff;
+                font-weight: 600;
+                min-height: 30px;
+                min-width: 88px;
+            }
+            QMessageBox QPushButton:hover, QDialog QPushButton:hover {
+                background: #2584ef;
+            }
+            QMessageBox QPushButton:pressed, QDialog QPushButton:pressed {
+                background: #1f72d1;
+            }
+        """
+
+    def _show_message(self, icon: QMessageBox.Icon, title: str, message: str) -> None:
+        box = QMessageBox(self)
+        box.setIcon(icon)
+        box.setWindowTitle(title)
+        box.setText(message)
+        box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        box.setStyleSheet(self._dialog_stylesheet())
+        box.exec()
 
     def _open_location(self) -> None:
         output_root = Path(self.output_edit.text().strip()).expanduser().resolve()
@@ -480,6 +525,7 @@ class MainWindow(QMainWindow):
         about.setWindowTitle("About IMG-UPSCLR")
         about.setModal(True)
         about.resize(640, 360)
+        about.setStyleSheet(self._dialog_stylesheet())
 
         layout = QVBoxLayout(about)
         layout.setContentsMargins(14, 14, 14, 14)
@@ -498,8 +544,8 @@ class MainWindow(QMainWindow):
         details = QLabel(
             f"Run size: 1 to {self.MAX_IMAGES} images per job\n"
             "Modes: Smart, Crisp, Photo, Classic (legacy mode values are still accepted)\n"
-            "Engine: detail-safe upscale + optional Real-ESRGAN AI path for photo/render assets\n"
-            "AI target: up to 16x when AI path is enabled\n"
+            "Engine: detail-safe upscale + optional conservative Real-ESRGAN path\n"
+            "AI path: one native AI pass, then clean resizing to final scale\n"
             "Formats: PNG, JPG, JPEG, WEBP, TIFF, BMP"
         )
         details.setWordWrap(True)
@@ -518,8 +564,10 @@ class MainWindow(QMainWindow):
         if self.thread and self.thread.isRunning():
             return
         if self.selected_files and len(self.selected_files) > self.MAX_IMAGES:
-            QMessageBox.warning(
-                self, "Too Many Images", f"Please select at most {self.MAX_IMAGES} images."
+            self._show_message(
+                QMessageBox.Icon.Warning,
+                "Too Many Images",
+                f"Please select at most {self.MAX_IMAGES} images.",
             )
             return
 
@@ -532,7 +580,7 @@ class MainWindow(QMainWindow):
         config = self._build_config()
         if config.selected_files:
             self.log_output.append(f"Selected files: {len(config.selected_files)}")
-        self.selection_label.setText("Processing…")
+        self.selection_label.setText("Processing...")
         self.worker = UpscaleWorker(config)
         self.thread = QThread(self)
         self.worker.moveToThread(self.thread)
@@ -573,13 +621,13 @@ class MainWindow(QMainWindow):
             summary = f"{summary}\nNo new files were processed. Check skip reasons in Results."
         self.log_output.append(summary)
         self.selection_label.setText("Done")
-        QMessageBox.information(self, "Upscaler Complete", summary)
+        self._show_message(QMessageBox.Icon.Information, "Upscaler Complete", summary)
 
     def _on_failed(self, message: str) -> None:
         self.run_button.setEnabled(True)
         self.log_output.append(f"[ERROR] {message}")
         self.selection_label.setText("Failed")
-        QMessageBox.critical(self, "Upscaler Failed", message)
+        self._show_message(QMessageBox.Icon.Critical, "Upscaler Failed", message)
 
     def _cleanup_worker(self) -> None:
         if self.worker:

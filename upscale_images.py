@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
         choices=ACCEPTED_MODES,
         default="smart",
         help=(
-            "Processing profile. Primary modes: smart, crisp, photo, classic. "
+            "Processing profile. Primary modes: smart, clean, crisp, photo, classic. "
             "Legacy aliases (auto/ui/artwork) are still accepted."
         ),
     )
@@ -108,6 +108,12 @@ def parse_args() -> argparse.Namespace:
         default="realesrgan-x4plus",
         help="Real-ESRGAN model for the AI path.",
     )
+    parser.add_argument(
+        "--artwork-ai-max-native-passes",
+        type=int,
+        default=1,
+        help="Maximum Real-ESRGAN native passes before clean resizing. Defaults to 1.",
+    )
     return parser.parse_args()
 
 
@@ -131,6 +137,7 @@ def main() -> int:
         artwork_ai_target_scale=args.artwork_ai_target_scale,
         auto_install_backend=True,
         esrgan_model_artwork=args.esrgan_model_artwork,
+        artwork_ai_max_native_passes=args.artwork_ai_max_native_passes,
     )
 
     try:

@@ -10,9 +10,9 @@
 
 !define APP_PUBLISHER "Unsound Studios"
 !define APP_EXE "IMG-UPSCLR.exe"
-!define APP_SOURCE_DIR "dist\IMG-UPSCLR"
+!define APP_SOURCE_DIR "..\..\dist\IMG-UPSCLR"
 !define APP_INSTALL_DIR "$PROGRAMFILES64\${APP_NAME}"
-!define APP_OUTPUT_DIR "installers\windows\output"
+!define APP_OUTPUT_DIR "output"
 
 Unicode True
 SetCompressor /SOLID lzma

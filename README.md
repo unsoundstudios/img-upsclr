@@ -10,7 +10,8 @@ IMG-UPSCLR supports:
 - Single image upscaling
 - Batch upscaling up to 12 images per run
 - Smart mode for mixed assets
-- Real-ESRGAN AI enhancement paths
+- Clean non-AI photo upscaling
+- Conservative Real-ESRGAN AI enhancement paths
 
 Supported formats:
 - PNG
@@ -23,8 +24,9 @@ Supported formats:
 ## Processing Modes
 
 - `smart`: Recommended adaptive mode
+- `clean`: Deterministic non-AI mode for photos that should not be reinterpreted
 - `crisp`: Detail-safe mode for UI, logos, and text
-- `photo`: AI-first mode for photo and render assets
+- `photo`: Conservative AI mode for photo and render assets
 - `classic`: Original script-style behavior
 
 Legacy aliases are still accepted in CLI:
@@ -90,10 +92,11 @@ python3 upscale_images.py --input _images --output _images/upscaled_10x --scale 
 ```
 
 Common options:
-- `--mode smart|crisp|photo|classic`
+- `--mode smart|clean|crisp|photo|classic`
 - `--max-images 12`
 - `--suffix _UPSCALED`
 - `--overwrite`
+- `--artwork-ai-max-native-passes 1`
 
 ## Notes
 

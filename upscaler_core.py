@@ -40,12 +40,17 @@ DEFAULT_SKIP_PATTERNS = (
 )
 
 # Public product-facing modes
-PUBLIC_MODES = ("smart", "crisp", "photo", "classic")
+PUBLIC_MODES = ("smart", "clean", "crisp", "photo", "classic")
 
 # Backward compatible aliases accepted from existing configs/UI builds.
 MODE_ALIASES = {
     "smart": "smart",
     "auto": "smart",
+    "clean": "clean",
+    "natural": "clean",
+    "nonai": "clean",
+    "non-ai": "clean",
+    "photo-clean": "clean",
     "crisp": "crisp",
     "detail": "crisp",
     "ui": "crisp",
@@ -89,7 +94,7 @@ class UpscaleConfig:
     artwork_ai_target_scale: float = 16.0
     auto_install_backend: bool = True
     esrgan_model_artwork: str = "realesrgan-x4plus"
-    artwork_ai_max_native_passes: int = 2
+    artwork_ai_max_native_passes: int = 1
 
 
 @dataclass
@@ -215,6 +220,8 @@ def classify_image(path: Path, img: Image.Image, forced_mode: str) -> str:
 
     if mode == "crisp":
         return "detail"
+    if mode == "clean":
+        return "clean_photo"
     if mode == "photo":
         return "creative"
     if mode == "classic":
@@ -296,6 +303,13 @@ def enhance_artwork(img: Image.Image, sharpness: float) -> Image.Image:
     return img
 
 
+def enhance_clean_photo(img: Image.Image) -> Image.Image:
+    # Thresholded sharpening improves edges without boosting smooth gradients or sensor noise.
+    img = img.filter(ImageFilter.UnsharpMask(radius=0.85, percent=95, threshold=4))
+    img = img.filter(ImageFilter.UnsharpMask(radius=1.8, percent=45, threshold=7))
+    return ImageEnhance.Sharpness(img).enhance(1.015)
+
+
 def enhance_ui(img: Image.Image, sharpness: float) -> Image.Image:
     img = img.filter(ImageFilter.UnsharpMask(radius=1.0, percent=160, threshold=1))
     img = ImageEnhance.Contrast(img).enhance(1.02)
@@ -337,6 +351,18 @@ def upscale_image_original(
     return merge_alpha(enhanced, resampled_alpha)
 
 
+def upscale_image_clean_photo(img: Image.Image, scale: float) -> Image.Image:
+    base = prepare_image(img)
+    rgb, alpha = split_alpha(base)
+    resampled_rgb = resize_progressive(rgb, scale, Image.Resampling.LANCZOS)
+
+    resampled_alpha = None
+    if alpha is not None:
+        resampled_alpha = resize_progressive(alpha, scale, Image.Resampling.LANCZOS)
+
+    return merge_alpha(enhance_clean_photo(resampled_rgb), resampled_alpha)
+
+
 def upscale_artwork_ai(
     img: Image.Image,
     target_scale: float,
@@ -369,6 +395,11 @@ def upscale_image(img: Image.Image, kind: str, config: UpscaleConfig) -> Image.I
 
     if mode in {"smart", "photo"} and kind == "creative" and config.artwork_ai_enabled:
         return upscale_artwork_ai(img, target_scale=item_scale, config=config)
+
+    if mode == "clean" or kind == "clean_photo" or (
+        mode in {"smart", "photo"} and kind == "creative" and not config.artwork_ai_enabled
+    ):
+        return upscale_image_clean_photo(img=img, scale=item_scale)
 
     if mode == "classic":
         legacy_kind = kind if kind in {"ui", "artwork"} else "artwork"
